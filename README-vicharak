@@ -1,0 +1,56 @@
+Folder Structure
+================
+
+- configs/axon-defconfig => configuration file
+
+Preinstalled
+===============
+
+skopeo
+
+Setup
+=====
+
+- make axon_defconfig
+- make      
+
+
+
+BR2_PACKAGE_ROCKCHIP_RKBIN=y
+   1 BR2_PACKAGE_ROCKCHIP_BLOBS_VERSION="master"
+
+
+
+
+(Useful) Package-specific build targets
+<PACKAGE>-dirclean - does full rebuild by completely removing build/<PACKAGE> directory
+<PACKAGE>-rebuild - essentially make run in package directory
+<PACKAGE>-menuconfig
+<PACKAGE>-savedefconfig
+
+
+
+U-boot
+=======
+
+Add has in boot/uboot/uboot.hash
+manually build in output/build/../../ and generate u-boot.itb and idbloader.img
+
+genimage
+
+To Build
+=========
+
+Need to compile U-boot using ./make.sh itb
+
+
+Kernel
+=========
+
+https://deepwiki.com/buildroot/buildroot/3.1-linux-kernel-configuration
+
+make ARCH=arm64 mrproper
+make O=out ARCH=arm64 rockchip_linux_defconfig
+cat arch/arm64/configs/rk3588_axon.config >> out/.config
+make O=out ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- -j$(nproc --all)
+cp -vr out/.config .
