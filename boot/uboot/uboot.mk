@@ -178,14 +178,17 @@ UBOOT_MAKE_OPTS += \
 	HOSTLDFLAGS="$(HOST_LDFLAGS)" \
 	$(call qstrip,$(BR2_TARGET_UBOOT_CUSTOM_MAKEOPTS))
 
+#UBOOT_MAKE_OPTS += \
+	./make.sh itb
+
 # Disable FDPIC if enabled by default in toolchain
 ifeq ($(BR2_BINFMT_FDPIC),y)
 UBOOT_MAKE_OPTS += KCFLAGS=-mno-fdpic
 endif
 
 ifeq ($(BR2_TARGET_UBOOT_NEEDS_TPL),y)
-UBOOT_DEPENDENCIES += rockchip-blobs
-UBOOT_MAKE_OPTS += ROCKCHIP_TPL=ram_init.bin
+#UBOOT_DEPENDENCIES += rockchip-blobs
+#UBOOT_MAKE_OPTS += ROCKCHIP_TPL=ram_init.bin
 define UBOOT_COPY_TPL_FIRMWARE
 	cp $(BINARIES_DIR)/ram_init.bin $(@D)/
 endef
@@ -193,7 +196,7 @@ UBOOT_PRE_BUILD_HOOKS += UBOOT_COPY_TPL_FIRMWARE
 endif
 
 ifeq ($(BR2_TARGET_UBOOT_NEEDS_ATF_BL31),y)
-UBOOT_DEPENDENCIES += rockchip-blobs
+#UBOOT_DEPENDENCIES += rockchip-blobs
 ifeq ($(BR2_TARGET_UBOOT_NEEDS_ATF_BL31_ELF),y)
 UBOOT_MAKE_OPTS += BL31=bl31.elf
 define UBOOT_COPY_ATF_FIRMWARE
@@ -252,7 +255,7 @@ endif
 ifeq ($(BR2_TARGET_UBOOT_NEEDS_ROCKCHIP_RKBIN),y)
 UBOOT_DEPENDENCIES += rockchip-rkbin
 define UBOOT_INSTALL_UBOOT_ROCKCHIP_BIN
-	$(INSTALL) -D -m 0644 $(@D)/u-boot-rockchip.bin $(BINARIES_DIR)/u-boot-rockchip.bin
+	$(INSTALL) -D -m 0644 $(@D)/u-boot.itb $(BINARIES_DIR)/u-boot.itb
 endef
 UBOOT_POST_INSTALL_IMAGES_HOOKS += UBOOT_INSTALL_UBOOT_ROCKCHIP_BIN
 ifneq ($(ROCKCHIP_RKBIN_BL31_FILENAME),)
